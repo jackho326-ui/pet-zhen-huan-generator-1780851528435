@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>宠物甄嬛传剧本生成器 | Pet Zhen Huan Drama Generator</title>
+    <title>宠物甄嬛传：影级剧本生成器 | Pet Zhen Huan Cinematic Generator</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Serif+SC:wght@400;700&display=swap');
@@ -13,86 +13,103 @@
         .text-palace-gold { color: #D4AF37; }
         .border-palace-gold { border-color: #D4AF37; }
         .glass-morphism {
-            background: rgba(255, 255, 255, 0.9);
+            background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
             border: 1px solid rgba(212, 175, 55, 0.3);
         }
+        .cinematic-subtitle {
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+            font-family: 'Noto Serif SC', serif;
+        }
+        #blendCanvas {
+            max-width: 100%;
+            height: auto;
+            touch-action: none;
+        }
     </style>
 </head>
-<body class="bg-stone-100 font-serif-sc text-stone-800 pb-20">
+<body class="bg-stone-200 font-serif-sc text-stone-900 pb-20">
 
     <!-- Header -->
-    <header class="bg-palace-red text-palace-gold py-10 shadow-xl text-center relative overflow-hidden">
-        <div class="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/paper-fibers.png')]"></div>
-        <h1 class="text-5xl font-palace mb-2 relative z-10">宠物甄嬛传</h1>
-        <p class="text-sm tracking-widest uppercase relative z-10">Pet Zhen Huan Drama Generator</p>
+    <header class="bg-palace-red text-palace-gold py-12 shadow-2xl text-center relative overflow-hidden">
+        <div class="absolute inset-0 opacity-20 bg-[url('https://www.transparenttextures.com/patterns/imperial-army.png')]"></div>
+        <h1 class="text-6xl font-palace mb-3 relative z-10">宠物甄嬛传</h1>
+        <p class="text-sm tracking-[0.5em] uppercase relative z-10 font-bold">Cinematic Storyboard Generator</p>
     </header>
 
-    <main class="max-auto max-w-4xl px-4 py-8 space-y-12">
+    <main class="max-w-5xl mx-auto px-4 py-10 space-y-16">
         
-        <!-- Section 1: Drama Generator -->
-        <section id="generator" class="glass-morphism rounded-lg p-8 shadow-lg">
-            <div class="flex items-center justify-between mb-6 border-b-2 border-palace-gold pb-4">
-                <h2 class="text-2xl font-bold text-palace-red italic">后宫小剧场</h2>
-                <button onclick="generateDrama()" class="bg-palace-red text-palace-gold px-6 py-2 rounded-full hover:bg-red-900 transition-colors shadow-md font-bold">
-                    翻牌子 (随机生成)
-                </button>
+        <!-- Step 1: Character Selection & Flux Generation -->
+        <section class="glass-morphism rounded-xl p-8 shadow-2xl border-t-4 border-palace-red">
+            <div class="flex items-center justify-between mb-8 border-b-2 border-palace-gold pb-4">
+                <h2 class="text-3xl font-bold text-palace-red font-palace">第一阶段：影级剧本化身</h2>
+                <div class="space-x-4">
+                    <select id="catBreed" class="bg-white border-2 border-palace-gold rounded-md px-4 py-2 text-sm focus:outline-none">
+                        <option value="British Shorthair Blue Cat">英短蓝猫 (Cream)</option>
+                        <option value="Ginger Tabby Cat">橘猫 (Orange)</option>
+                        <option value="Siamese Cat">暹罗猫</option>
+                        <option value="Ragdoll Cat">布偶猫</option>
+                    </select>
+                    <button onclick="generateCinematicDrama()" class="bg-palace-red text-palace-gold px-8 py-2 rounded-full hover:bg-red-900 transition-all shadow-lg font-bold">
+                        开启影级大戏
+                    </button>
+                </div>
             </div>
+
+            <div id="storyboardContainer" class="grid grid-cols-1 md:grid-cols-1 gap-12">
+                <div class="text-center text-stone-400 py-20 italic">请选择爱宠品种并点击“开启影级大戏”来生成AI分镜...</div>
+            </div>
+        </section>
+
+        <!-- Step 2: Face-Blend Overlay Tool -->
+        <section id="faceBlendTool" class="glass-morphism rounded-xl p-8 shadow-2xl border-t-4 border-stone-800 hidden">
+            <h2 class="text-3xl font-bold text-stone-800 mb-8 border-b-2 border-stone-300 pb-4 font-palace">第二阶段：圣容叠影 (Face-Blend)</h2>
             
-            <div id="drama-output" class="space-y-6 min-h-[400px]">
-                <div class="text-center text-stone-400 py-20 italic">点击“翻牌子”开始今日大戏...</div>
-            </div>
-        </section>
-
-        <!-- Section 2: Factions & Cold Palace Templates -->
-        <section class="grid md:grid-cols-2 gap-8">
-            <!-- Factions -->
-            <div class="glass-morphism rounded-lg p-6 shadow-md border-l-4 border-palace-gold">
-                <h3 class="text-xl font-bold text-palace-red mb-4 font-palace">六宫势力图</h3>
-                <ul class="space-y-3 text-sm">
-                    <li class="flex items-center justify-between border-b border-stone-200 pb-1">
-                        <span class="font-bold">【皇后派】</span>
-                        <span class="text-stone-600">领袖: Cream (端庄持重)</span>
-                    </li>
-                    <li class="flex items-center justify-between border-b border-stone-200 pb-1">
-                        <span class="font-bold">【祺贵人派】</span>
-                        <span class="text-stone-600">领袖: Orange (恃宠而骄)</span>
-                    </li>
-                    <li class="flex items-center justify-between border-b border-stone-200 pb-1">
-                        <span class="font-bold">【吃瓜派】</span>
-                        <span class="text-stone-600">领袖: 各种原住民猫狗</span>
-                    </li>
-                </ul>
-            </div>
-
-            <!-- Cold Palace -->
-            <div class="glass-morphism rounded-lg p-6 shadow-md border-l-4 border-stone-800 bg-stone-200">
-                <h3 class="text-xl font-bold text-stone-800 mb-4 font-palace">冷宫名册</h3>
-                <div class="text-xs text-stone-500 italic space-y-2">
-                    <p>“此地清冷，唯有残羹冷炙。”</p>
-                    <div class="bg-white/50 p-2 rounded">
-                        <p>禁闭原因：拆家、偷吃小鱼干、半夜蹦迪</p>
-                        <p class="mt-1 text-right">— 景仁宫禁令</p>
+            <div class="flex flex-col lg:flex-row gap-10 items-start">
+                <div class="w-full lg:w-2/3 relative bg-black rounded-lg overflow-hidden shadow-inner">
+                    <canvas id="blendCanvas"></canvas>
+                </div>
+                
+                <div class="w-full lg:w-1/3 space-y-6">
+                    <div class="p-4 bg-stone-100 rounded-lg border border-stone-300">
+                        <label class="block text-sm font-bold mb-2">上传爱宠圣容 (PNG透明背景更佳)</label>
+                        <input type="file" id="userPetImg" accept="image/*" class="w-full text-xs" onchange="loadUserPet(event)">
                     </div>
+
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-xs font-bold uppercase tracking-widest text-stone-500 mb-1">缩放大小 (Scale)</label>
+                            <input type="range" id="scale" min="0.1" max="3" step="0.01" value="1" class="w-full accent-palace-red" oninput="drawBlend()">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold uppercase tracking-widest text-stone-500 mb-1">旋转角度 (Rotate)</label>
+                            <input type="range" id="rotate" min="0" max="360" step="1" value="0" class="w-full accent-palace-red" oninput="drawBlend()">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold uppercase tracking-widest text-stone-500 mb-1">不透明度 (Opacity)</label>
+                            <input type="range" id="opacity" min="0" max="1" step="0.01" value="0.8" class="w-full accent-palace-red" oninput="drawBlend()">
+                        </div>
+                    </div>
+
+                    <button onclick="saveCurrentScene()" class="w-full bg-stone-800 text-white py-4 rounded-lg font-bold hover:bg-black transition-all shadow-xl">
+                        保存此幕圣容
+                    </button>
+                    <p class="text-[10px] text-stone-400 italic">提示：直接在画布上拖拽可以调整爱宠头像位置。</p>
                 </div>
             </div>
         </section>
 
-        <!-- Section 3: Nine-Grid Cutter Tool -->
-        <section id="grid-tool" class="glass-morphism rounded-lg p-8 shadow-lg">
-            <h2 class="text-2xl font-bold text-palace-red mb-6 border-b-2 border-palace-gold pb-4 italic">小主御用：九宫格切图</h2>
+        <!-- Step 3: Nine-Grid Tool -->
+        <section id="grid-tool" class="glass-morphism rounded-xl p-8 shadow-2xl border-t-4 border-stone-500">
+            <h2 class="text-3xl font-bold text-stone-600 mb-8 border-b-2 border-stone-200 pb-4 font-palace">第三阶段：朋友圈宣发 (九宫格)</h2>
             <div class="flex flex-col items-center space-y-4">
-                <input type="file" id="imageInput" accept="image/*" class="hidden" onchange="handleImage(event)">
-                <label for="imageInput" class="cursor-pointer bg-stone-800 text-white px-8 py-3 rounded-md hover:bg-black transition shadow-lg">
-                    上传猫片/犬照
+                <input type="file" id="imageInput" accept="image/*" class="hidden" onchange="handleGridImage(event)">
+                <label for="imageInput" class="cursor-pointer bg-stone-700 text-white px-10 py-3 rounded-md hover:bg-black transition shadow-lg font-bold uppercase text-sm tracking-widest">
+                    上传成品大片
                 </label>
-                
-                <div id="previewContainer" class="grid grid-cols-3 gap-1 w-full max-w-sm aspect-square bg-stone-200 border-2 border-stone-300 hidden">
-                    <!-- Canvas elements will be injected here -->
-                </div>
-                
+                <div id="previewContainer" class="grid grid-cols-3 gap-1 w-full max-w-md aspect-square bg-stone-300 border-2 border-stone-400 hidden"></div>
                 <div id="downloadAction" class="hidden">
-                    <button onclick="downloadAll()" class="bg-green-700 text-white px-6 py-2 rounded-full hover:bg-green-800 transition">
+                    <button onclick="downloadAllGrid()" class="bg-green-800 text-white px-8 py-2 rounded-full hover:bg-green-900 transition font-bold shadow-lg">
                         批量下载九宫格
                     </button>
                 </div>
@@ -101,139 +118,180 @@
 
     </main>
 
-    <footer class="text-center text-stone-500 text-xs mt-12 mb-8">
-        &copy; 2026 紫禁城宠物局. All Rights Reserved.
+    <footer class="text-center text-stone-400 text-xs mt-20 mb-10 tracking-widest">
+        &copy; 2026 FORBIDDEN CITY PET STUDIO | POWERED BY FLUX & POKE
     </footer>
 
     <script>
-        // --- 1. Random Script Generator Logic ---
-        const actors = {
-            empress: { name: "Cream (皇后)", style: "端庄, 绵里藏针" },
-            concubine: { name: "Orange (祺贵人)", style: "骄横, 诡计多端" }
-        };
-
-        const plotPoints = [
-            {
-                act: "第一幕：晨请",
-                content: [
-                    "Orange故意迟到，说是昨晚陪皇上（铲屎官）玩逗猫棒太累。",
-                    "Cream端坐景仁宫，看都不看一眼，只管慢条斯理地洗脸。",
-                    "Orange挑衅：‘哟，皇后这猫砂盆似乎该换了，气味大了些。’"
-                ]
-            },
-            {
-                act: "第二幕：争宠",
-                content: [
-                    "铲屎官拿出一罐高级罐头。",
-                    "Orange一个箭步冲上前，娇声喵叫：‘皇上偏心，臣妾正长身体呢。’",
-                    "Cream冷笑一声：‘本宫没记错的话，你上月刚胖了两斤。’"
-                ]
-            },
-            {
-                act: "第三幕：设局",
-                content: [
-                    "Orange打碎了博古架上的花瓶，却故意留下Cream的一撮白毛。",
-                    "铲屎官大怒。Cream淡淡道：‘这点小伎俩，本宫三岁时就不玩了。’",
-                    "Orange咬牙切齿：‘贱人就是矫情！’"
-                ]
-            },
-            {
-                act: "第四幕：对质",
-                content: [
-                    "苏公公（扫地机器人）路过，带走了关键证据。",
-                    "Cream指出：‘Orange，你爪子上的碎屑还没擦干净呢。’",
-                    "Orange惊慌失措：‘臣妾是被陷害的！是那橘猫教唆我的！’"
-                ]
-            },
-            {
-                act: "第五幕：结局",
-                content: [
-                    "Orange被罚去冷宫（笼子）禁足三日，停发小鱼干。",
-                    "Cream望着窗外月色：‘这后宫的猫粮，终究是凉了。’",
-                    "铲屎官感叹：‘你们两只猪能不能别演了。’"
-                ]
-            }
+        // --- DATA & STATE ---
+        const dramaTemplate = [
+            { act: "第一幕：景仁宫晨请", script: "臣妾给皇后娘娘请安，愿娘娘万福金安。", prompt: "A cinematic film still of a [CAT] wearing a luxury Qing Dynasty empress silk collar and imperial jewelry, sitting majestically on a wooden throne in a misty historical palace, golden lighting, 8k resolution, realistic fur." },
+            { act: "第二幕：御花园争宠", script: "那年杏花微雨，你说你是朕的铲屎官。", prompt: "A cinematic medium shot of a [CAT] in a beautiful garden with cherry blossoms falling, wearing a colorful silk concubine outfit, looking melancholic and noble, shallow depth of field, high cinematic quality." },
+            { act: "第三幕：滴血验亲", script: "这罐头里被下了迷药，本宫一闻便知！", prompt: "A dramatic cinematic shot of a [CAT] looking shocked in a dark palace interior, flickering candles, historical Chinese props, high contrast, cinematic atmosphere." },
+            { act: "第四幕：祺贵人陨落", script: "臣妾是被陷害的！这鱼干分明是橘猫给我的！", prompt: "A cinematic close-up of a wet [CAT] in the rain outside a heavy red palace door, looking desperate but beautiful, cinematic blue grading, highly detailed." },
+            { act: "第五幕：终极权力", script: "这万千恩宠，终究是给了这满地的猫毛。", prompt: "A wide cinematic long shot of a [CAT] standing on top of a palace roof overlooking the Forbidden City at sunset, epic scale, masterwork lighting, photorealistic." }
         ];
 
-        function generateDrama() {
-            const output = document.getElementById('drama-output');
-            output.innerHTML = '';
-            
-            plotPoints.forEach((p, index) => {
-                const div = document.createElement('div');
-                div.className = "p-4 border-l-2 border-palace-gold bg-white shadow-sm rounded-r-lg opacity-0 transform translate-y-4 transition-all duration-500";
-                div.style.transitionDelay = `${index * 200}ms`;
+        let currentSceneBaseImg = new Image();
+        let userPetImg = new Image();
+        let petX = 0, petY = 0, isDragging = false;
+        const canvas = document.getElementById('blendCanvas');
+        const ctx = canvas.getContext('2d');
+
+        // --- STORYBOARD GENERATION ---
+        async function generateCinematicDrama() {
+            const breed = document.getElementById('catBreed').value;
+            const container = document.getElementById('storyboardContainer');
+            container.innerHTML = '<div class="text-center py-20"><div class="inline-block animate-spin rounded-full h-12 w-12 border-t-2 border-palace-red"></div><p class="mt-4 font-palace">正在宣旨生成影级分镜...</p></div>';
+
+            let html = '';
+            for (let i = 0; i < dramaTemplate.length; i++) {
+                const scene = dramaTemplate[i];
+                const finalPrompt = encodeURIComponent(scene.prompt.replace('[CAT]', breed));
+                const imageUrl = `https://image.pollinations.ai/p/${finalPrompt}?width=1280&height=720&seed=${Math.floor(Math.random()*10000)}&nologo=true`;
                 
-                const randomLine = p.content[Math.floor(Math.random() * p.content.length)];
-                
-                div.innerHTML = `
-                    <h4 class="font-bold text-palace-red mb-1">${p.act}</h4>
-                    <p class="text-stone-700 leading-relaxed">${randomLine}</p>
+                html += `
+                    <div class="relative group cursor-pointer overflow-hidden rounded-xl shadow-2xl border-2 border-stone-800" onclick="initBlendMode('${imageUrl}', '${scene.script.replace(/'/g, "\\'")}')">
+                        <img src="${imageUrl}" class="w-full h-auto transform group-hover:scale-105 transition duration-700">
+                        <div class="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent p-6">
+                            <h3 class="text-palace-gold font-palace text-xl mb-2">${scene.act}</h3>
+                            <p class="text-white text-center italic text-lg cinematic-subtitle">“${scene.script}”</p>
+                        </div>
+                        <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition duration-300 bg-black/40">
+                            <span class="bg-palace-red text-palace-gold px-6 py-2 rounded-full font-bold">点击进入圣容合成</span>
+                        </div>
+                    </div>
                 `;
-                output.appendChild(div);
-                
-                setTimeout(() => {
-                    div.classList.remove('opacity-0', 'translate-y-4');
-                }, 10);
-            });
+            }
+            container.innerHTML = html;
         }
 
-        // --- 2. Nine-Grid Cutter Logic ---
-        let canvases = [];
+        // --- FACE BLEND LOGIC ---
+        function initBlendMode(baseUri, subtitle) {
+            document.getElementById('faceBlendTool').classList.remove('hidden');
+            document.getElementById('faceBlendTool').scrollIntoView({ behavior: 'smooth' });
+            
+            currentSceneBaseImg.crossOrigin = "anonymous";
+            currentSceneBaseImg.src = baseUri;
+            currentSceneBaseImg.onload = () => {
+                canvas.width = 1280;
+                canvas.height = 720;
+                currentSceneBaseImg.subtitle = subtitle;
+                drawBlend();
+            };
+        }
 
-        function handleImage(e) {
+        function loadUserPet(e) {
             const reader = new FileReader();
-            reader.onload = function(event) {
+            reader.onload = (event) => {
+                userPetImg.src = event.target.result;
+                userPetImg.onload = () => {
+                    petX = canvas.width / 2;
+                    petY = canvas.height / 2;
+                    drawBlend();
+                };
+            };
+            reader.readAsDataURL(e.target.files[0]);
+        }
+
+        function drawBlend() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // 1. Draw AI Base
+            if (currentSceneBaseImg.complete) {
+                ctx.drawImage(currentSceneBaseImg, 0, 0, canvas.width, canvas.height);
+            }
+
+            // 2. Draw User Pet Overlay
+            if (userPetImg.complete && userPetImg.src) {
+                const scale = parseFloat(document.getElementById('scale').value);
+                const rotate = parseFloat(document.getElementById('rotate').value);
+                const opacity = parseFloat(document.getElementById('opacity').value);
+                
+                ctx.save();
+                ctx.translate(petX, petY);
+                ctx.rotate(rotate * Math.PI / 180);
+                ctx.globalAlpha = opacity;
+                
+                const w = userPetImg.width * scale;
+                const h = userPetImg.height * scale;
+                ctx.drawImage(userPetImg, -w/2, -h/2, w, h);
+                ctx.restore();
+            }
+
+            // 3. Draw Subtitles
+            if (currentSceneBaseImg.subtitle) {
+                ctx.font = 'bold 36px "Noto Serif SC"';
+                ctx.fillStyle = 'white';
+                ctx.textAlign = 'center';
+                ctx.shadowColor = 'black';
+                ctx.shadowBlur = 10;
+                ctx.fillText(`“${currentSceneBaseImg.subtitle}”`, canvas.width / 2, canvas.height - 60);
+            }
+        }
+
+        // Mouse/Touch Events for dragging
+        canvas.addEventListener('mousedown', (e) => { isDragging = true; });
+        window.addEventListener('mouseup', () => { isDragging = false; });
+        canvas.addEventListener('mousemove', (e) => {
+            if (isDragging) {
+                const rect = canvas.getBoundingClientRect();
+                const scaleX = canvas.width / rect.width;
+                const scaleY = canvas.height / rect.height;
+                petX = (e.clientX - rect.left) * scaleX;
+                petY = (e.clientY - rect.top) * scaleY;
+                drawBlend();
+            }
+        });
+
+        function saveCurrentScene() {
+            const link = document.createElement('a');
+            link.download = `zhen_huan_scene_${Date.now()}.png`;
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        }
+
+        // --- NINE GRID LOGIC (INTACT) ---
+        let gridCanvases = [];
+        function handleGridImage(e) {
+            const reader = new FileReader();
+            reader.onload = (event) => {
                 const img = new Image();
-                img.onload = function() {
-                    splitImage(img);
+                img.onload = () => {
+                    const container = document.getElementById('previewContainer');
+                    const downloadBtn = document.getElementById('downloadAction');
+                    container.innerHTML = '';
+                    container.classList.remove('hidden');
+                    downloadBtn.classList.remove('hidden');
+                    gridCanvases = [];
+
+                    const size = Math.min(img.width, img.height);
+                    const startX = (img.width - size) / 2;
+                    const startY = (img.height - size) / 2;
+                    const pieceSize = size / 3;
+
+                    for (let i = 0; i < 9; i++) {
+                        const row = Math.floor(i / 3), col = i % 3;
+                        const cnv = document.createElement('canvas');
+                        cnv.width = 600; cnv.height = 600;
+                        const gctx = cnv.getContext('2d');
+                        gctx.drawImage(img, startX + col * (size/3), startY + row * (size/3), size/3, size/3, 0, 0, 600, 600);
+                        cnv.className = "w-full h-full border border-white/20 shadow-md";
+                        container.appendChild(cnv);
+                        gridCanvases.push(cnv);
+                    }
                 };
                 img.src = event.target.result;
             };
             reader.readAsDataURL(e.target.files[0]);
         }
 
-        function splitImage(img) {
-            const container = document.getElementById('previewContainer');
-            const downloadBtn = document.getElementById('downloadAction');
-            container.innerHTML = '';
-            container.classList.remove('hidden');
-            downloadBtn.classList.remove('hidden');
-            canvases = [];
-
-            // Determine the square size
-            const size = Math.min(img.width, img.height);
-            const startX = (img.width - size) / 2;
-            const startY = (img.height - size) / 2;
-            const pieceSize = size / 3;
-
-            for (let i = 0; i < 9; i++) {
-                const row = Math.floor(i / 3);
-                const col = i % 3;
-
-                const canvas = document.createElement('canvas');
-                canvas.width = pieceSize;
-                canvas.height = pieceSize;
-                const ctx = canvas.getContext('2d');
-                
-                ctx.drawImage(
-                    img, 
-                    startX + col * pieceSize, startY + row * pieceSize, pieceSize, pieceSize, 
-                    0, 0, pieceSize, pieceSize
-                );
-                
-                canvas.className = "w-full h-full border border-white/50";
-                container.appendChild(canvas);
-                canvases.push(canvas);
-            }
-        }
-
-        function downloadAll() {
-            canvases.forEach((canvas, i) => {
-                const link = document.createElement('a');
-                link.download = `drama_piece_${i + 1}.png`;
-                link.href = canvas.toDataURL('image/png');
-                link.click();
+        function downloadAllGrid() {
+            gridCanvases.forEach((c, i) => {
+                const l = document.createElement('a');
+                l.download = `grid_${i+1}.png`;
+                l.href = c.toDataURL();
+                l.click();
             });
         }
     </script>
