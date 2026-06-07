@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>宠物甄嬛传剧本生成器 | Pet Zhen Huan Drama Generator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Serif+SC:wght@400;700&display=swap');
+        .font-palace { font-family: 'Ma+Shan+Zheng', cursive; }
+        .font-serif-sc { font-family: 'Noto Serif SC', serif; }
+        .bg-palace-red { background-color: #8B1C22; }
+        .text-palace-gold { color: #D4AF37; }
+        .border-palace-gold { border-color: #D4AF37; }
+        .glass-morphism {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+        }
+    </style>
+</head>
+<body class="bg-stone-100 font-serif-sc text-stone-800 pb-20">
+
+    <!-- Header -->
+    <header class="bg-palace-red text-palace-gold py-10 shadow-xl text-center relative overflow-hidden">
+        <div class="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/paper-fibers.png')]"></div>
+        <h1 class="text-5xl font-palace mb-2 relative z-10">宠物甄嬛传</h1>
+        <p class="text-sm tracking-widest uppercase relative z-10">Pet Zhen Huan Drama Generator</p>
+    </header>
+
+    <main class="max-auto max-w-4xl px-4 py-8 space-y-12">
+        
+        <!-- Section 1: Drama Generator -->
+        <section id="generator" class="glass-morphism rounded-lg p-8 shadow-lg">
+            <div class="flex items-center justify-between mb-6 border-b-2 border-palace-gold pb-4">
+                <h2 class="text-2xl font-bold text-palace-red italic">后宫小剧场</h2>
+                <button onclick="generateDrama()" class="bg-palace-red text-palace-gold px-6 py-2 rounded-full hover:bg-red-900 transition-colors shadow-md font-bold">
+                    翻牌子 (随机生成)
+                </button>
+            </div>
+            
+            <div id="drama-output" class="space-y-6 min-h-[400px]">
+                <div class="text-center text-stone-400 py-20 italic">点击“翻牌子”开始今日大戏...</div>
+            </div>
+        </section>
+
+        <!-- Section 2: Factions & Cold Palace Templates -->
+        <section class="grid md:grid-cols-2 gap-8">
+            <!-- Factions -->
+            <div class="glass-morphism rounded-lg p-6 shadow-md border-l-4 border-palace-gold">
+                <h3 class="text-xl font-bold text-palace-red mb-4 font-palace">六宫势力图</h3>
+                <ul class="space-y-3 text-sm">
+                    <li class="flex items-center justify-between border-b border-stone-200 pb-1">
+                        <span class="font-bold">【皇后派】</span>
+                        <span class="text-stone-600">领袖: Cream (端庄持重)</span>
+                    </li>
+                    <li class="flex items-center justify-between border-b border-stone-200 pb-1">
+                        <span class="font-bold">【祺贵人派】</span>
+                        <span class="text-stone-600">领袖: Orange (恃宠而骄)</span>
+                    </li>
+                    <li class="flex items-center justify-between border-b border-stone-200 pb-1">
+                        <span class="font-bold">【吃瓜派】</span>
+                        <span class="text-stone-600">领袖: 各种原住民猫狗</span>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Cold Palace -->
+            <div class="glass-morphism rounded-lg p-6 shadow-md border-l-4 border-stone-800 bg-stone-200">
+                <h3 class="text-xl font-bold text-stone-800 mb-4 font-palace">冷宫名册</h3>
+                <div class="text-xs text-stone-500 italic space-y-2">
+                    <p>“此地清冷，唯有残羹冷炙。”</p>
+                    <div class="bg-white/50 p-2 rounded">
+                        <p>禁闭原因：拆家、偷吃小鱼干、半夜蹦迪</p>
+                        <p class="mt-1 text-right">— 景仁宫禁令</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: Nine-Grid Cutter Tool -->
+        <section id="grid-tool" class="glass-morphism rounded-lg p-8 shadow-lg">
+            <h2 class="text-2xl font-bold text-palace-red mb-6 border-b-2 border-palace-gold pb-4 italic">小主御用：九宫格切图</h2>
+            <div class="flex flex-col items-center space-y-4">
+                <input type="file" id="imageInput" accept="image/*" class="hidden" onchange="handleImage(event)">
+                <label for="imageInput" class="cursor-pointer bg-stone-800 text-white px-8 py-3 rounded-md hover:bg-black transition shadow-lg">
+                    上传猫片/犬照
+                </label>
+                
+                <div id="previewContainer" class="grid grid-cols-3 gap-1 w-full max-w-sm aspect-square bg-stone-200 border-2 border-stone-300 hidden">
+                    <!-- Canvas elements will be injected here -->
+                </div>
+                
+                <div id="downloadAction" class="hidden">
+                    <button onclick="downloadAll()" class="bg-green-700 text-white px-6 py-2 rounded-full hover:bg-green-800 transition">
+                        批量下载九宫格
+                    </button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="text-center text-stone-500 text-xs mt-12 mb-8">
+        &copy; 2026 紫禁城宠物局. All Rights Reserved.
+    </footer>
+
+    <script>
+        // --- 1. Random Script Generator Logic ---
+        const actors = {
+            empress: { name: "Cream (皇后)", style: "端庄, 绵里藏针" },
+            concubine: { name: "Orange (祺贵人)", style: "骄横, 诡计多端" }
+        };
+
+        const plotPoints = [
+            {
+                act: "第一幕：晨请",
+                content: [
+                    "Orange故意迟到，说是昨晚陪皇上（铲屎官）玩逗猫棒太累。",
+                    "Cream端坐景仁宫，看都不看一眼，只管慢条斯理地洗脸。",
+                    "Orange挑衅：‘哟，皇后这猫砂盆似乎该换了，气味大了些。’"
+                ]
+            },
+            {
+                act: "第二幕：争宠",
+                content: [
+                    "铲屎官拿出一罐高级罐头。",
+                    "Orange一个箭步冲上前，娇声喵叫：‘皇上偏心，臣妾正长身体呢。’",
+                    "Cream冷笑一声：‘本宫没记错的话，你上月刚胖了两斤。’"
+                ]
+            },
+            {
+                act: "第三幕：设局",
+                content: [
+                    "Orange打碎了博古架上的花瓶，却故意留下Cream的一撮白毛。",
+                    "铲屎官大怒。Cream淡淡道：‘这点小伎俩，本宫三岁时就不玩了。’",
+                    "Orange咬牙切齿：‘贱人就是矫情！’"
+                ]
+            },
+            {
+                act: "第四幕：对质",
+                content: [
+                    "苏公公（扫地机器人）路过，带走了关键证据。",
+                    "Cream指出：‘Orange，你爪子上的碎屑还没擦干净呢。’",
+                    "Orange惊慌失措：‘臣妾是被陷害的！是那橘猫教唆我的！’"
+                ]
+            },
+            {
+                act: "第五幕：结局",
+                content: [
+                    "Orange被罚去冷宫（笼子）禁足三日，停发小鱼干。",
+                    "Cream望着窗外月色：‘这后宫的猫粮，终究是凉了。’",
+                    "铲屎官感叹：‘你们两只猪能不能别演了。’"
+                ]
+            }
+        ];
+
+        function generateDrama() {
+            const output = document.getElementById('drama-output');
+            output.innerHTML = '';
+            
+            plotPoints.forEach((p, index) => {
+                const div = document.createElement('div');
+                div.className = "p-4 border-l-2 border-palace-gold bg-white shadow-sm rounded-r-lg opacity-0 transform translate-y-4 transition-all duration-500";
+                div.style.transitionDelay = `${index * 200}ms`;
+                
+                const randomLine = p.content[Math.floor(Math.random() * p.content.length)];
+                
+                div.innerHTML = `
+                    <h4 class="font-bold text-palace-red mb-1">${p.act}</h4>
+                    <p class="text-stone-700 leading-relaxed">${randomLine}</p>
+                `;
+                output.appendChild(div);
+                
+                setTimeout(() => {
+                    div.classList.remove('opacity-0', 'translate-y-4');
+                }, 10);
+            });
+        }
+
+        // --- 2. Nine-Grid Cutter Logic ---
+        let canvases = [];
+
+        function handleImage(e) {
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                const img = new Image();
+                img.onload = function() {
+                    splitImage(img);
+                };
+                img.src = event.target.result;
+            };
+            reader.readAsDataURL(e.target.files[0]);
+        }
+
+        function splitImage(img) {
+            const container = document.getElementById('previewContainer');
+            const downloadBtn = document.getElementById('downloadAction');
+            container.innerHTML = '';
+            container.classList.remove('hidden');
+            downloadBtn.classList.remove('hidden');
+            canvases = [];
+
+            // Determine the square size
+            const size = Math.min(img.width, img.height);
+            const startX = (img.width - size) / 2;
+            const startY = (img.height - size) / 2;
+            const pieceSize = size / 3;
+
+            for (let i = 0; i < 9; i++) {
+                const row = Math.floor(i / 3);
+                const col = i % 3;
+
+                const canvas = document.createElement('canvas');
+                canvas.width = pieceSize;
+                canvas.height = pieceSize;
+                const ctx = canvas.getContext('2d');
+                
+                ctx.drawImage(
+                    img, 
+                    startX + col * pieceSize, startY + row * pieceSize, pieceSize, pieceSize, 
+                    0, 0, pieceSize, pieceSize
+                );
+                
+                canvas.className = "w-full h-full border border-white/50";
+                container.appendChild(canvas);
+                canvases.push(canvas);
+            }
+        }
+
+        function downloadAll() {
+            canvases.forEach((canvas, i) => {
+                const link = document.createElement('a');
+                link.download = `drama_piece_${i + 1}.png`;
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+            });
+        }
+    </script>
+</body>
+</html>
